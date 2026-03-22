@@ -2,13 +2,21 @@ import { Module } from '@nestjs/common';
 import { ProductModule } from './product/product.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { Product } from './product/entities/product.entity';
 import { HealthModule } from './health/health.module';
+import { LoggerModule } from 'nestjs-pino';
+import { ShutdownService } from './shutdown.service';
 
 @Module({
-  imports: [ 
+  imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+    }),
+    LoggerModule.forRoot({
+      pinoHttp: {
+        timestamp: () => `,"timestamp":"${new Date().toISOString()}"`,
+        messageKey: 'message',
+        transport: undefined,
+      },
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -20,14 +28,15 @@ import { HealthModule } from './health/health.module';
         username: configService.get<string>('DB_USER'),
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_NAME'),
-        entities: [Product],
-        synchronize: true
-      })
+        autoLoadEntities: true,
+        synchronize: false,
+        migrations: ['dist/migrations/*.js'],
+      }),
     }),
     ProductModule,
     HealthModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [ShutdownService],
 })
 export class AppModule {}
