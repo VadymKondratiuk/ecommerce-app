@@ -3,6 +3,7 @@ import { ProductModule } from './product/product.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Product } from './product/entities/product.entity';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [ 
@@ -24,6 +25,7 @@ import { Product } from './product/entities/product.entity';
       })
     }),
     ProductModule,
+    HealthModule,
   ],
   controllers: [],
   providers: [],
