@@ -1,11 +1,21 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { AppDataSource } from './data-source';
+import { Logger } from 'nestjs-pino';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  await AppDataSource.initialize();
+  await AppDataSource.runMigrations();
+
+  const app = await NestFactory.create(AppModule, { bufferLogs: true });
+  const logger = app.get(Logger);
+  app.useLogger(logger);
+
+  app.enableShutdownHooks();
+
   const PORT = process.env.PORT || 3000;
-  await app.listen(PORT, () => {
-    console.log(`Server started on port: ${PORT}`);
-  });
+  await app.listen(PORT);
+
+  logger.log(`Server started on port: ${PORT}`);
 }
 bootstrap();
