@@ -31,6 +31,7 @@ import { ShutdownService } from './shutdown.service';
         autoLoadEntities: true,
         synchronize: false,
         migrations: ['dist/migrations/*.js'],
+        migrationsRun: true,
       }),
     }),
     ProductModule,
