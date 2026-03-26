@@ -2,8 +2,11 @@ name: Lab3 Kubernetes Quality Gate
 
 on:
   push:
-    branches: ['main']
+    branches:
+      - lab3
   pull_request:
+    branches:
+      - lab3
 
 jobs:
   k8s-test:

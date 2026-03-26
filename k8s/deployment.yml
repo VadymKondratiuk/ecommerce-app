@@ -16,7 +16,7 @@ spec:
         - name: app
           image: f1lzters322/ecommerce-app:latest
           ports:
-            - containerPort: 3000
+            - containerPort: 8080
 
           envFrom:
             - secretRef:
@@ -27,13 +27,13 @@ spec:
           livenessProbe:
             httpGet:
               path: /health
-              port: 3000
+              port: 8080
             initialDelaySeconds: 10
             periodSeconds: 5
 
           readinessProbe:
             httpGet:
               path: /health
-              port: 3000
+              port: 8080
             initialDelaySeconds: 5
             periodSeconds: 5

@@ -1,6 +1,12 @@
 name: Lab 1 Grading
 
-on: [push]
+on:
+  push:
+    branches:
+      - lab1
+  pull_request:
+    branches:
+      - lab1
 
 jobs:
   validate:
