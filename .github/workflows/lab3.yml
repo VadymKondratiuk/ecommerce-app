@@ -16,8 +16,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: Create KinD cluster
         uses: helm/kind-action@v1.10.0
+        with:
+          cluster_name: kind
 
       - name: Check cluster
         run: |
@@ -36,11 +41,15 @@ jobs:
 
       - name: Load image into KinD
         run: |
-          kind load docker-image ecommerce-app:local
+          kind load docker-image ecommerce-app:local --name kind
 
       - name: Apply Kubernetes manifests
         run: |
           kubectl apply -f k8s/
+
+      - name: Wait for deployment to exist
+        run: |
+          kubectl wait --for=condition=available deployment/ecommerce-app --timeout=180s || true
 
       - name: Wait for app rollout
         run: |
