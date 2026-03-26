@@ -15,6 +15,7 @@ spec:
       containers:
         - name: app
           image: f1lzters322/ecommerce-app:latest
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
 
