@@ -29,11 +29,8 @@ jobs:
           kubectl cluster-info
           kubectl get nodes
 
-      - name: Wait for nodes to be ready
+      - name: Wait for nodes
         run: kubectl wait --for=condition=ready node --all --timeout=120s
-
-      - name: Wait for system pods
-        run: kubectl wait --for=condition=ready pod -n kube-system --all --timeout=180s
 
       - name: Build Docker image
         run: |
@@ -43,22 +40,13 @@ jobs:
         run: |
           kind load docker-image ecommerce-app:local --name kind
 
-      - name: Apply Kubernetes manifests
+      - name: Apply manifests
         run: |
           kubectl apply -f k8s/
 
-      - name: Wait for deployment to exist
+      - name: Wait for rollout
         run: |
-          kubectl wait --for=condition=available deployment/ecommerce-app --timeout=180s || true
-
-      - name: Wait for app rollout
-        run: |
-          kubectl rollout status deployment/ecommerce-app --timeout=180s
-
-      - name: Wait for pods to be ready
-        run: |
-          kubectl get pods -A
-          kubectl wait --for=condition=ready pod -l app=ecommerce-app --timeout=120s
+          kubectl rollout status deployment/ecommerce-app --timeout=240s
 
       - name: Run Grading Script
         run: |
