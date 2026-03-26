@@ -24,9 +24,19 @@ jobs:
           kubectl cluster-info
           kubectl get nodes
 
+      - name: Wait for nodes to be ready
+        run: kubectl wait --for=condition=ready node --all --timeout=120s
+
+      - name: Wait for system pods
+        run: kubectl wait --for=condition=ready pod -n kube-system --all --timeout=180s
+
       - name: Apply Kubernetes manifests
         run: |
           kubectl apply -f k8s/
+
+      - name: Wait for app rollout
+        run: |
+          kubectl rollout status deployment/ecommerce-app --timeout=180s
 
       - name: Wait for pods to be ready
         run: |
