@@ -30,6 +30,14 @@ jobs:
       - name: Wait for system pods
         run: kubectl wait --for=condition=ready pod -n kube-system --all --timeout=180s
 
+      - name: Build Docker image
+        run: |
+          docker build -t ecommerce-app:local .
+
+      - name: Load image into KinD
+        run: |
+          kind load docker-image ecommerce-app:local
+
       - name: Apply Kubernetes manifests
         run: |
           kubectl apply -f k8s/
