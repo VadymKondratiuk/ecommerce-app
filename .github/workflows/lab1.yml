@@ -4,11 +4,9 @@ on:
   push:
     branches:
       - lab1
-      - main
   pull_request:
     branches:
       - lab1
-      - main
 
 jobs:
   validate:
