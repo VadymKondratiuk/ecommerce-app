@@ -7,6 +7,7 @@ on:
 env: 
   REGISTRY: ghcr.io
   PACKAGE_NAME: ecommerce-app
+  OWNER_LC: ""
 
 jobs: 
   build-and-push: 
