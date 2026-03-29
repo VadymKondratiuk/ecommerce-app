@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - lab3
+      - main
   pull_request:
     branches:
       - lab3
+      - main
 
 jobs:
   k8s-test:
