@@ -1,0 +1,14 @@
+replicaCount: 2
+
+image:
+  repository: ghcr.io/vadymkondratiuk/ecommerce-app
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "128Mi"
+  limits:
+    cpu: "250m"
+    memory: "256Mi"
